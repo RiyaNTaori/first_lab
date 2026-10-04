@@ -1,0 +1,27 @@
+name: Build and push Image Docker
+
+on:
+  push:
+    branches: [main]
+  pull_request: 
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu_latest
+    
+    steps:
+    - uses: actions/checkout@v1
+
+    - name : Docker Login
+      env: 
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        Docker_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+    - name : Build and push image
+      run: |
+        docker image build -t RiyaNTaori/docker-image:latest
+        docker push RiyaNTaori/docker-image:latest
+    
